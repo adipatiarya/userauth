@@ -27,12 +27,13 @@ class UserUseCase {
     const user = await this._userRepository.addUser(registerUser);
     const roleId = await this._roleRepository.getIdByname(useCasePayload.role);
     await this._roleRepository.addUserToRole(roleId, user.id);
-    return new RegisteredUser(user);
+    return new RegisteredUser({ ...user, role: useCasePayload.role });
   }
 
   async getUserById(userId) {
     await this._userRepository.verifyUserExist(userId);
     const result = await this._userRepository.getUserById(userId);
+
     const role = result.role.map((r) => r.name).join(', ');
     return new RegisteredUser({ ...result, role });
   }

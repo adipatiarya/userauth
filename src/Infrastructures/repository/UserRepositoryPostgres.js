@@ -68,6 +68,19 @@ class UserRepositoryPostgres extends UserRepository {
     return id;
   }
 
+  async verifyUserExist(userId) {
+    const query = {
+      text: 'SELECT * FROM users WHERE id = $1',
+      values: [userId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('user tidak ditemukan');
+    }
+  }
+
   async getUserById(userId) {
     const query = {
       text: `SELECT users.id, users.name , users.email, roles.id as roleid ,roles.name as role

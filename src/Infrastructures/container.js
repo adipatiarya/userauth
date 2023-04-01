@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* istanbul ignore file */
 
 const { createContainer } = require('instances-container');
@@ -15,14 +16,15 @@ const UserRepositoryPostgres = require('./repository/UserRepositoryPostgres');
 const BcryptPasswordHash = require('./security/BcryptPasswordHash');
 
 // use case
-const AddUserUseCase = require('../Applications/use_case/AddUserUseCase');
+const UserUseCase = require('../Applications/use_case/UserUseCase');
+
 const AuthenticationTokenManager = require('../Applications/security/AuthenticationTokenManager');
 const JwtTokenManager = require('./security/JwtTokenManager');
-const LoginUserUseCase = require('../Applications/use_case/LoginUserUseCase');
+const AuthUseCase = require('../Applications/use_case/AuthUseCase');
 const AuthenticationRepository = require('../Domains/authentications/AuthenticationRepository');
 const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres');
-const LogoutUserUseCase = require('../Applications/use_case/LogoutUserUseCase');
-const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAuthenticationUseCase');
+const RoleRepository = require('../Domains/roles/RoleRepository');
+const RoleRepositoryPostgres = require('./repository/RoleRepositoryPostgres');
 
 // creating container
 const container = createContainer();
@@ -37,8 +39,20 @@ container.register([
         {
           concrete: pool,
         },
+
         {
           concrete: nanoid,
+        },
+      ],
+    },
+  },
+  {
+    key: RoleRepository.name,
+    Class: RoleRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool,
         },
       ],
     },
@@ -81,8 +95,8 @@ container.register([
 // registering use cases
 container.register([
   {
-    key: AddUserUseCase.name,
-    Class: AddUserUseCase,
+    key: UserUseCase.name,
+    Class: UserUseCase,
     parameter: {
       injectType: 'destructuring',
       dependencies: [
@@ -94,12 +108,16 @@ container.register([
           name: 'passwordHash',
           internal: PasswordHash.name,
         },
+        {
+          name: 'roleRepository',
+          internal: RoleRepository.name,
+        },
       ],
     },
   },
   {
-    key: LoginUserUseCase.name,
-    Class: LoginUserUseCase,
+    key: AuthUseCase.name,
+    Class: AuthUseCase,
     parameter: {
       injectType: 'destructuring',
       dependencies: [
@@ -118,40 +136,9 @@ container.register([
         {
           name: 'passwordHash',
           internal: PasswordHash.name,
-        },
-      ],
-    },
-  },
-  {
-    key: LogoutUserUseCase.name,
-    Class: LogoutUserUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        {
-          name: 'authenticationRepository',
-          internal: AuthenticationRepository.name,
-        },
-      ],
-    },
-  },
-  {
-    key: RefreshAuthenticationUseCase.name,
-    Class: RefreshAuthenticationUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        {
-          name: 'authenticationRepository',
-          internal: AuthenticationRepository.name,
-        },
-        {
-          name: 'authenticationTokenManager',
-          internal: AuthenticationTokenManager.name,
         },
       ],
     },
   },
 ]);
-
 module.exports = container;

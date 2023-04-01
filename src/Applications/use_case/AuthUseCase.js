@@ -1,7 +1,7 @@
 const UserLogin = require('../../Domains/users/entities/UserLogin');
 const NewAuthentication = require('../../Domains/authentications/entities/NewAuth');
 
-class LoginUserUseCase {
+class AuthUseCase {
   constructor({
     userRepository,
     authenticationRepository,
@@ -39,4 +39,4 @@ class LoginUserUseCase {
   }
 }
 
-module.exports = LoginUserUseCase;
+module.exports = AuthUseCase;

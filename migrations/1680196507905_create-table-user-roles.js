@@ -1,14 +1,16 @@
 exports.up = (pgm) => {
   pgm.createTable('user_roles', {
+    id: {
+      type: 'SERIAL',
+      primaryKey: true,
+    },
     user_id: {
       type: 'VARCHAR(50)',
-      primaryKey: true,
       notNull: true,
 
     },
     role_id: {
       type: 'VARCHAR(50)',
-      primaryKey: true,
       notNull: true,
     },
   });

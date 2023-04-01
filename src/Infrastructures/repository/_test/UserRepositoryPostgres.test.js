@@ -1,5 +1,7 @@
+const RolesTableTestHelper = require('../../../../tests/RolesTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const pool = require('../../database/postgres/pool');
 const UserRepositoryPostgres = require('../UserRepositoryPostgres');
 
@@ -96,8 +98,24 @@ describe('UserRepositoryPostgres', () => {
       expect(password).toBe('secret_password');
     });
   });
+  describe('getAllUser function', () => {
+    it('should return user array id correctly', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-321', email: 'yes@gmail.com' });
+      await UsersTableTestHelper.addUser({ id: 'user-3mks', email: 'yess@gmail.com' });
+      await RolesTableTestHelper.addUserToRole('mSjGCTfn8w', 'user-321');
+      await RolesTableTestHelper.addUserToRole('mSjGCTfn8w', 'user-3mks');
+      await RolesTableTestHelper.addUserToRole('p0ZoB1FwH6', 'user-321');
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
 
-  describe('getIdByEmail', () => {
+      // Actionmks
+      const users = await userRepositoryPostgres.getAllUser();
+      expect(users[0].role).toHaveLength(2);
+      expect(users[1].role).toHaveLength(1);
+    });
+  });
+
+  describe('getIdByEmail Function', () => {
     it('should throw InvariantError when user not found', async () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
@@ -118,6 +136,50 @@ describe('UserRepositoryPostgres', () => {
 
       // Assert
       expect(userId).toEqual('user-321');
+    });
+  });
+  describe('getUserById Function', () => {
+    it('should return user object multi role ', async () => {
+      await UsersTableTestHelper.addUser({}); // id = 123;
+      await RolesTableTestHelper.addUserToRole('p0ZoB1FwH6', '123');
+      await RolesTableTestHelper.addUserToRole('mSjGCTfn8w', '123');
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool);
+      const user = await userRepositoryPostgres.getUserById('123');
+      expect(user).toEqual({
+        id: '123',
+        name: 'suratman',
+        email: 'test@gmail.com',
+        role: [
+          { id: 'p0ZoB1FwH6', name: 'admin' },
+          { id: 'mSjGCTfn8w', name: 'user' },
+        ],
+      });
+    });
+    it('should return user object single role ', async () => {
+      await UsersTableTestHelper.addUser({}); // id = 123;
+      await RolesTableTestHelper.addUserToRole('p0ZoB1FwH6', '123');
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool);
+      const user = await userRepositoryPostgres.getUserById('123');
+      expect(user).toEqual({
+        id: '123',
+        name: 'suratman',
+        email: 'test@gmail.com',
+        role: [
+          { id: 'p0ZoB1FwH6', name: 'admin' },
+        ],
+      });
+    });
+    it('should error user not found ', async () => {
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool);
+      await expect(userRepositoryPostgres.getUserById('xxxx')).rejects.toThrowError(NotFoundError);
+    });
+  });
+  describe('deleteUserById Function', () => {
+    it('should return user object multi role ', async () => {
+      await UsersTableTestHelper.addUser({}); // id = 123;
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool);
+      await userRepositoryPostgres.deleteUserById('123');
+      await expect(userRepositoryPostgres.getUserById('123')).rejects.toThrowError(NotFoundError);
     });
   });
 });

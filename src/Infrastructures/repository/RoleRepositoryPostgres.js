@@ -8,15 +8,11 @@ class RoleRepositoryPostgres extends RoleRepository {
   }
 
   async addUserToRole(roleId, userId) {
-    try {
-      const query = {
-        text: 'INSERT INTO user_roles(role_id, user_id) VALUES ($1, $2)',
-        values: [roleId, userId],
-      };
-      await this._pool.query(query);
-    } catch (error) {
-      throw new InvariantError('DUPLIKATE_KEY_USER_ROLE');
-    }
+    const query = {
+      text: 'INSERT INTO user_roles(role_id, user_id) VALUES ($1, $2)',
+      values: [roleId, userId],
+    };
+    await this._pool.query(query);
   }
 
   async getIdByname(name) {

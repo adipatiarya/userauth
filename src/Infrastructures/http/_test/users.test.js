@@ -134,35 +134,7 @@ describe('/users endpoint', () => {
       expect(responseJson.message).toEqual('email tidak tersedia');
     });
   });
-  describe('when GET /users/id', () => {
-    it('should response 200 and persisted user', async () => {
-      // Arrange
-      const requestPayload = {
-        email: 'yes@gmail.com',
-        password: 'secret',
-        name: 'kirun',
-        role: 'admin',
-      };
-      // eslint-disable-next-line no-undef
-      const server = await createServer(container);
 
-      const response = await server.inject({
-        method: 'POST',
-        url: '/users',
-        payload: requestPayload,
-      });
-
-      const { data } = JSON.parse(response.payload);
-
-      // Action
-      const usersResponse = await server.inject({
-        method: 'GET',
-        url: `/users/${data.addedUser.id}`,
-      });
-      const r = JSON.parse(usersResponse.payload);
-      expect(r.data.user).toBeDefined();
-    });
-  });
   describe('when GET /users', () => {
     it('should response 200 and persisted users', async () => {
       // Arrange
@@ -194,6 +166,92 @@ describe('/users endpoint', () => {
       const { data } = JSON.parse(usersResponse.payload);
       expect(data.users).toBeDefined();
       expect(data.users).toHaveLength(2);
+    });
+  });
+  describe('when GET /users/id', () => {
+    it('should response 200 and persisted user', async () => {
+      // Arrange
+      const requestPayload = {
+        email: 'yes@gmail.com',
+        password: 'secret',
+        name: 'kirun',
+        role: 'admin',
+      };
+      // eslint-disable-next-line no-undef
+      const server = await createServer(container);
+
+      const response = await server.inject({
+        method: 'POST',
+        url: '/users',
+        payload: requestPayload,
+      });
+
+      const { data } = JSON.parse(response.payload);
+
+      // Action
+      const usersResponse = await server.inject({
+        method: 'GET',
+        url: `/users/${data.addedUser.id}`,
+      });
+      const r = JSON.parse(usersResponse.payload);
+      expect(r.data.user).toBeDefined();
+    });
+  });
+
+  describe('when DELETE /users/id', () => {
+    it('should response 200 ', async () => {
+      // Arrange
+      const requestPayload = {
+        email: 'yes@gmail.com',
+        password: 'secret',
+        name: 'kirun',
+        role: 'admin',
+      };
+      // eslint-disable-next-line no-undef
+      const server = await createServer(container);
+
+      const response = await server.inject({
+        method: 'POST',
+        url: '/users',
+        payload: requestPayload,
+      });
+
+      const { data } = JSON.parse(response.payload);
+
+      // Action
+      const usersResponse = await server.inject({
+        method: 'DELETE',
+        url: `/users/${data.addedUser.id}`,
+      });
+      const r = JSON.parse(usersResponse.payload);
+      expect(response.statusCode).toEqual(201);
+      expect(r.status).toEqual('success');
+    });
+    it('should response 404 when user not found ', async () => {
+      // Arrange
+      const requestPayload = {
+        email: 'yes@gmail.com',
+        password: 'secret',
+        name: 'kirun',
+        role: 'admin',
+      };
+      // eslint-disable-next-line no-undef
+      const server = await createServer(container);
+
+      await server.inject({
+        method: 'POST',
+        url: '/users',
+        payload: requestPayload,
+      });
+
+      // Action
+      const response = await server.inject({
+        method: 'DELETE',
+        url: '/users/xxx',
+      });
+      const r = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(r.status).toEqual('fail');
     });
   });
 });

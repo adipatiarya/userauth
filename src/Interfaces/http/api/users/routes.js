@@ -14,6 +14,11 @@ const routes = (handler) => ([
     path: '/users',
     handler: () => handler.getUsersHandler(),
   },
+  {
+    method: 'DELETE',
+    path: '/users/{id}',
+    handler: (req) => handler.deleteUsersHandler(req),
+  },
 ]);
 
 module.exports = routes;

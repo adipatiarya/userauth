@@ -39,6 +39,15 @@ class UsersHandler {
       },
     };
   }
+
+  async deleteUsersHandler(request) {
+    const userUseCase = this._container.getInstance(UserUseCase.name);
+    await userUseCase.deleteUserById(request.params.id);
+    return {
+      status: 'success',
+
+    };
+  }
 }
 
 module.exports = UsersHandler;

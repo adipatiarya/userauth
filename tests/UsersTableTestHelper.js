@@ -6,7 +6,7 @@ const UsersTableTestHelper = {
     id = '123', name = 'suratman', email = 'test@gmail.com', password = 'secret',
   }) {
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4)',
+      text: 'INSERT INTO users(id, name, email, password) VALUES($1, $2, $3, $4)',
       values: [id, name, email, password],
     };
 

@@ -36,6 +36,11 @@ class UserUseCase {
     const role = result.role.map((r) => r.name).join(', ');
     return new RegisteredUser({ ...result, role });
   }
+
+  async deleteUserById(userId) {
+    await this._userRepository.verifyUserExist(userId);
+    await this._userRepository.deleteUserById(userId);
+  }
 }
 
 module.exports = UserUseCase;

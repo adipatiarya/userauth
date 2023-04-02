@@ -26,7 +26,7 @@ describe('/authentications endpoint', () => {
       // add user
       await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: {
           email: 'test@gmail.com',
           password: 'secret',
@@ -38,7 +38,7 @@ describe('/authentications endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/login',
+        url: '/api/login',
         payload: requestPayload,
       });
 
@@ -61,7 +61,7 @@ describe('/authentications endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/login',
+        url: '/api/login',
         payload: requestPayload,
       });
 
@@ -82,7 +82,7 @@ describe('/authentications endpoint', () => {
       // Add user
       await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: {
           email: 'test@gmail.com',
           password: 'secret',
@@ -94,7 +94,7 @@ describe('/authentications endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/login',
+        url: '/api/login',
         payload: requestPayload,
       });
 
@@ -115,7 +115,7 @@ describe('/authentications endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/login',
+        url: '/api/login',
         payload: requestPayload,
       });
 
@@ -137,7 +137,7 @@ describe('/authentications endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/login',
+        url: '/api/login',
         payload: requestPayload,
       });
 

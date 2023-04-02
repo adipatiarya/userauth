@@ -27,7 +27,7 @@ describe('HTTP server', () => {
     // Action
     const response = await server.inject({
       method: 'POST',
-      url: '/users',
+      url: '/api/users',
       payload: requestPayload,
     });
 

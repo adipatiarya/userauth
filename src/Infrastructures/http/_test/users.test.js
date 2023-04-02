@@ -27,7 +27,7 @@ describe('/users endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: requestPayload,
       });
 
@@ -50,7 +50,7 @@ describe('/users endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: requestPayload,
       });
 
@@ -74,7 +74,7 @@ describe('/users endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: requestPayload,
       });
 
@@ -98,7 +98,7 @@ describe('/users endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: requestPayload,
       });
 
@@ -123,7 +123,7 @@ describe('/users endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: requestPayload,
       });
 
@@ -149,19 +149,19 @@ describe('/users endpoint', () => {
 
       await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: requestPayload,
       });
       await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: { ...requestPayload, email: 'budi@budi.com' },
       });
 
       // Action
       const usersResponse = await server.inject({
         method: 'GET',
-        url: '/users',
+        url: '/api/users',
       });
       const { data } = JSON.parse(usersResponse.payload);
       expect(data.users).toBeDefined();
@@ -182,7 +182,7 @@ describe('/users endpoint', () => {
 
       const response = await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: requestPayload,
       });
 
@@ -191,7 +191,7 @@ describe('/users endpoint', () => {
       // Action
       const usersResponse = await server.inject({
         method: 'GET',
-        url: `/users/${data.addedUser.id}`,
+        url: `/api/users/${data.addedUser.id}`,
       });
       const r = JSON.parse(usersResponse.payload);
       expect(r.data.user).toBeDefined();
@@ -212,7 +212,7 @@ describe('/users endpoint', () => {
 
       const response = await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: requestPayload,
       });
 
@@ -221,7 +221,7 @@ describe('/users endpoint', () => {
       // Action
       const usersResponse = await server.inject({
         method: 'DELETE',
-        url: `/users/${data.addedUser.id}`,
+        url: `/api/users/${data.addedUser.id}`,
       });
       const r = JSON.parse(usersResponse.payload);
       expect(response.statusCode).toEqual(201);
@@ -240,14 +240,14 @@ describe('/users endpoint', () => {
 
       await server.inject({
         method: 'POST',
-        url: '/users',
+        url: '/api/users',
         payload: requestPayload,
       });
 
       // Action
       const response = await server.inject({
         method: 'DELETE',
-        url: '/users/xxx',
+        url: '/api/users/xxx',
       });
       const r = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);

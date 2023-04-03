@@ -12,6 +12,9 @@
 ```bash
   git clone https://github.com/adipatiarya/userauth.git
 ```
+```
+ cp env.example .env
+```
 
 ```bash
   cd userauth && docker-compose up -d

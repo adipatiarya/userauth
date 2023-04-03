@@ -34,7 +34,8 @@ membutuhkan link database
   cd userauth && npm install
 ```
 ```bash
-  npm run migrate
+  npm run migrate up
+  npm run test
 ```
 ```bash
   npm run start
